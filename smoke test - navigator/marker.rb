@@ -1,0 +1,30 @@
+require 'selenium-webdriver'
+require 'rspec'
+require 'capybara'
+require 'capybara/rspec'
+
+
+Capybara.default_driver = :selenium_chrome
+Capybara.ignore_hidden_elements = false 
+Capybara.javascript_driver = :selenium
+
+
+RSpec.describe 'Navigator Smoke Test', type: :feature do
+    before(:each) do
+        page.driver.browser.manage.window.maximize
+        visit 'https://www.navigator.ba/#/categories'
+    end
+
+    it 'Drags a marker' do 
+        find('#ember566', visible: false).click
+        source = page.find('.leaflet-marker-draggable')
+        #target = page.find(:xpath, '/html/body/div[4]/div/div/div[2]/div/div[2]/div[2]/div[1]/div/div[2]/img[19]')
+        #source.drag_to(target)
+        puts source.native.css_value('transform')
+        #puts element
+        sleep(5)
+        execute_script("arguments[0].setAttribute('style', 'transform: translate3d(732px, 325px, 90px); z-index: 325;');", source)
+        sleep(5)
+        puts source.native.css_value('transform')
+    end
+end
